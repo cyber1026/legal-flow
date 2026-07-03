@@ -1,0 +1,6 @@
+[submodule "libs/LinearRAG"]
+	path = libs/LinearRAG
+	url = https://github.com/DEEP-PolyU/LinearRAG.git
+[submodule "libs/LightRAG"]
+	path = libs/LightRAG
+	url = https://github.com/HKUDS/LightRAG.git

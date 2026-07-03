@@ -1,0 +1,76 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Node
+node_modules/
+
+# 数据与向量库（大文件，不入库）
+data/
+vector_store/
+
+# Docling 模型权重缓存（运行时下载的 .safetensors/.pth/.onnx，体积巨大，不入库）
+docling_artifacts/
+
+# 构建产物 / 数据卷
+volumes
+reports
+
+# Environment variables
+.env
+
+# 日志（滚动文件持久化，不入库）
+logs/
+
+# 临时目录
+tmp/
+
+# 爬虫登录态（敏感，勿入库）
+scripts/crawl/.rmfyalk_cookie
+*_cookie
+
+# 本地工具目录 / 临时截图（非源码）
+.claude/
+.planning/
+image*.png
+
+# 本地 Agent / 规划 / 临时说明文件（不上传到开源仓库）
+AGENTS.md
+CLAUDE.md
+Deepseekv4.md
+TODO.md
+USER.md
+example.ipynb
+example.py
+findings.md
+progress.md
+task_plan.md
+docs/code-review-*.md
+docs/superpowers/
+docs/design/
+docs/Solution.md
+docs/layer3_practice_guides_crawler.md
+docs/layer4_standard_contracts_crawler.md
+docs/legal_sources_data_report.md
+
+# 前端 TS 增量构建产物
+frontend/web/tsconfig.tsbuildinfo
+
+ckpts/
+
+# 评测运行缓存与本地实验结果
+eval/contract_clause_risk_review/datasets/
+eval/**/cache/
+eval/**/results/

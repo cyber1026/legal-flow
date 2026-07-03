@@ -1,0 +1,83 @@
+[project]
+name = "legal-flow"
+version = "0.1.0"
+description = "Chinese legal AI workflow for RAG, contract review, and evaluation."
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "bcrypt>=5.0.0",
+    "beautifulsoup4>=4.14.3",
+    "deepagents>=0.5.3",
+    "fastapi[standard]>=0.136.1",
+    "httpx[socks]>=0.28.1",
+    "huggingface-hub==0.32",
+    "jieba>=0.42.1",
+    "langchain>=1.2.15",
+    "langchain-milvus>=0.3.3",
+    "langchain-openai>=1.2.1",
+    "langchain-text-splitters>=1.1.2",
+    "langgraph>=1.1.9",
+    "langgraph-checkpoint-postgres>=3.1.0",
+    "langsmith>=0.7.37",
+    "lxml>=6.1.0",
+    "olefile>=0.47",
+    "prometheus-fastapi-instrumentator>=7.1.0",
+    "psycopg[binary,pool]>=3.3.4",
+    "pydantic-settings>=2.14.1",
+    "pyjwt>=2.12.1",
+    "pypdf>=6.12.2",
+    "python-dotenv>=1.2.2",
+    "python-multipart>=0.0.28",
+    "rank-bm25>=0.2.2",
+    "requests>=2.33.1",
+    "tqdm>=4.67.3",
+]
+
+[project.optional-dependencies]
+contracts = [
+    "docling>=2.93.0",
+    "paddleocr>=2.10.0",
+    "paddlepaddle-gpu>=3.0.0,<4",
+    "playwright>=1.60.0",
+    "torch>=2.5.0,<2.9",
+    "torchvision>=0.20.0,<0.24",
+]
+eval = [
+    "datasets>=4.8.5",
+    "ragas>=0.4.3",
+    "sentence-transformers>=5.5.0",
+]
+graphrag = [
+    "python-igraph==0.11.8",
+    "spacy>=3.8,<3.9",
+    "spacy-curated-transformers>=0.3.1,<1.0.0",
+    "cupy-cuda12x>=13.4.1,<14.0.0",
+]
+
+
+[tool.uv]
+# 限制只解析 Linux 平台，因为在 windows 平台依赖版本会冲突
+environments = ["sys_platform == 'linux'"]   
+
+[[tool.uv.index]]
+name = "paddle-cu126"
+url = "https://www.paddlepaddle.org.cn/packages/stable/cu126/"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[tool.uv.sources]
+paddlepaddle-gpu = { index = "paddle-cu126" }
+torch = { index = "pytorch-cu126" }
+torchvision = { index = "pytorch-cu126" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
