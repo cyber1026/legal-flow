@@ -1,0 +1,48 @@
+name: Bug report
+description: 报告可复现的缺陷
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 问题描述
+      description: 简要说明发生了什么，以及你期望发生什么。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 请提供命令、输入文件类型、页面路径或 API 请求。
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志或截图
+      description: 请删除密钥、合同正文、个人信息后再粘贴。
+      render: shell
+  - type: dropdown
+    id: area
+    attributes:
+      label: 影响模块
+      options:
+        - 法律问答 / RAG
+        - 合同审查
+        - 知识库入库
+        - 前端界面
+        - 评测
+        - 部署 / 配置
+        - 其他
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 版本信息
+      description: commit SHA、分支、操作系统、Python / Node 版本。
