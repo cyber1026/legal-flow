@@ -1,0 +1,508 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   Agentic RAG — AI Native Theme (Linear / Perplexity / Claude /
+   Notion AI inspired). Single tuned dark palette; light mode is
+   kept as a graceful fallback for users who force `light`.
+   ============================================================ */
+
+@theme {
+  /* ── Brand ─────────────────────────────────────────────────── */
+  --color-brand:            #7C8CFF;
+  --color-brand-strong:     #6878ff;
+  --color-brand-soft:       rgba(124, 140, 255, 0.12);
+  --color-brand-glow:       rgba(124, 140, 255, 0.35);
+
+  /* ── Surfaces (dark, default) ──────────────────────────────── */
+  --color-bg:               #0B1020;
+  --color-bg-elev:          #111827;     /* sidebar */
+  --color-bg-subtle:        rgba(255, 255, 255, 0.04);
+  --color-bg-hover:         rgba(255, 255, 255, 0.06);
+
+  --color-fg:               rgba(255, 255, 255, 0.92);
+  --color-fg-muted:         rgba(255, 255, 255, 0.55);
+  --color-fg-faint:         rgba(255, 255, 255, 0.35);
+
+  --color-border:           rgba(255, 255, 255, 0.08);
+  --color-border-strong:    rgba(255, 255, 255, 0.14);
+
+  /* shadcn/tailwind aliases (so existing components keep working) */
+  --color-input:            rgba(255, 255, 255, 0.04);
+  --color-ring:             rgba(124, 140, 255, 0.45);
+  --color-accent:           rgba(255, 255, 255, 0.06);
+  --color-accent-fg:        rgba(255, 255, 255, 0.92);
+  --color-primary:          #7C8CFF;
+  --color-primary-fg:       #ffffff;
+  --color-secondary:        rgba(255, 255, 255, 0.06);
+  --color-secondary-fg:     rgba(255, 255, 255, 0.92);
+  --color-destructive:      #ff6b6b;
+  --color-destructive-fg:   #ffffff;
+  --color-card:             rgba(255, 255, 255, 0.03);
+  --color-card-fg:          rgba(255, 255, 255, 0.92);
+  --color-sidebar:          #111827;
+
+  /* ── Radii ─────────────────────────────────────────────────── */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+
+  /* ── Animations ────────────────────────────────────────────── */
+  --animate-shimmer:    shimmer    2s   linear     infinite;
+  --animate-pulse-soft: pulse-soft 1.6s ease-in-out infinite;
+  --animate-fade-in:    fade-in    0.2s ease-out;
+  --animate-rise-in:    rise-in    0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ============================================================
+   Light fallback (only when user explicitly forces `light`)
+   ============================================================ */
+:where(.light) {
+  --color-bg:               #ffffff;
+  --color-bg-elev:          #f9fafb;
+  --color-bg-subtle:        rgba(0, 0, 0, 0.04);
+  --color-bg-hover:         rgba(0, 0, 0, 0.06);
+  --color-fg:               #0f172a;
+  --color-fg-muted:         rgba(15, 23, 42, 0.62);
+  --color-fg-faint:         rgba(15, 23, 42, 0.38);
+  --color-border:           rgba(15, 23, 42, 0.10);
+  --color-border-strong:    rgba(15, 23, 42, 0.18);
+  --color-input:            rgba(0, 0, 0, 0.04);
+  --color-accent:           rgba(0, 0, 0, 0.06);
+  --color-accent-fg:        #0f172a;
+  --color-secondary:        rgba(0, 0, 0, 0.06);
+  --color-secondary-fg:     #0f172a;
+  --color-card:             #ffffff;
+  --color-card-fg:          #0f172a;
+  --color-sidebar:          #f9fafb;
+  --color-primary-fg:       #ffffff;
+}
+
+/* ============================================================
+   Keyframes
+   ============================================================ */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%);  }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1;    transform: scale(1);    }
+  50%      { opacity: 0.55; transform: scale(0.97); }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes glow-breath {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(124, 140, 255, 0.0); }
+  50%      { box-shadow: 0 0 28px 2px rgba(124, 140, 255, 0.18); }
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  * { border-color: var(--color-border); }
+  html, body { height: 100%; }
+  html { color-scheme: dark; }
+
+  body {
+    position: relative;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family:
+      "Inter",
+      "MiSans", "HarmonyOS Sans SC", "HarmonyOS Sans",
+      "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+      ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 400;
+    letter-spacing: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow: hidden;  /* let inner scrollers handle scrolling */
+  }
+
+  /* Top radial glow + ambient gradient — fixed so it never moves */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(
+        ellipse 80% 50% at 50% -10%,
+        rgba(124, 140, 255, 0.18),
+        transparent 55%
+      ),
+      radial-gradient(
+        circle at 85% 0%,
+        rgba(180, 130, 255, 0.08),
+        transparent 40%
+      );
+  }
+
+  /* All app surfaces sit above the gradient */
+  body > * { position: relative; z-index: 1; }
+
+  ::selection {
+    background: rgba(124, 140, 255, 0.32);
+    color: #ffffff;
+  }
+
+  ::-webkit-scrollbar       { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.20);
+  }
+  ::-webkit-scrollbar-track { background: transparent; }
+}
+
+/* ============================================================
+   Reusable utility classes
+   ============================================================ */
+
+/* Glass card / glass surface */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.glass-strong {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Soft brand glow ring (for focused inputs / active cards) */
+.glow-ring {
+  box-shadow: 0 0 0 4px rgba(124, 140, 255, 0.12);
+}
+.glow-ring-strong {
+  box-shadow: 0 0 0 4px rgba(124, 140, 255, 0.18),
+              0 8px 36px -8px rgba(124, 140, 255, 0.30);
+}
+
+/* Hover lift (for cards / pills) */
+.lift {
+  transition: transform 0.2s ease, border-color 0.2s ease,
+              background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.lift:hover {
+  transform: translateY(-2px);
+  border-color: rgba(124, 140, 255, 0.45);
+  box-shadow: 0 12px 36px -10px rgba(124, 140, 255, 0.28);
+}
+
+/* Text gradient for hero titles */
+.text-gradient {
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.65) 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+}
+
+/* ============================================================
+   Markdown body
+   ============================================================ */
+.markdown-body { line-height: 1.75; }
+.markdown-body p { margin-block: 0.55rem; }
+.markdown-body p:first-child { margin-top: 0; }
+.markdown-body p:last-child  { margin-bottom: 0; }
+.markdown-body h1, .markdown-body h2,
+.markdown-body h3, .markdown-body h4 {
+  font-weight: 600;
+  margin-top: 1.3rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0;
+}
+.markdown-body h1 { font-size: 1.45rem; }
+.markdown-body h2 { font-size: 1.2rem;  }
+.markdown-body h3 { font-size: 1.05rem; }
+.markdown-body ul, .markdown-body ol {
+  padding-left: 1.5rem;
+  margin-block: 0.6rem;
+}
+.markdown-body ul { list-style: disc; }
+.markdown-body ol { list-style: decimal; }
+.markdown-body li { margin-block: 0.25rem; }
+.markdown-body code {
+  font-family: ui-monospace, "SFMono-Regular", "JetBrains Mono",
+    Menlo, Monaco, Consolas, monospace;
+  font-size: 0.87em;
+  padding: 0.13rem 0.36rem;
+  border-radius: 0.35rem;
+  background: rgba(124, 140, 255, 0.10);
+  color: #cdd2ff;
+}
+.markdown-body pre {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.85rem;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  margin-block: 0.85rem;
+}
+.markdown-body pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--color-fg);
+}
+.markdown-body blockquote {
+  border-left: 2px solid rgba(124, 140, 255, 0.55);
+  padding: 0.4rem 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  margin-block: 0.7rem;
+  color: var(--color-fg-muted);
+  background: rgba(124, 140, 255, 0.05);
+}
+.markdown-body a {
+  color: #b9c1ff;
+  text-decoration: underline;
+  text-decoration-color: rgba(124, 140, 255, 0.4);
+  text-underline-offset: 3px;
+}
+.markdown-body a:hover { color: #ffffff; text-decoration-color: #7C8CFF; }
+
+/* Tables (overflow-safe, glass-y) */
+.markdown-table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-block: 0.85rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  -webkit-overflow-scrolling: touch;
+}
+.markdown-body table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  font-size: 0.9em;
+}
+.markdown-body th, .markdown-body td {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.45rem 0.85rem;
+  white-space: nowrap;
+}
+.markdown-body th {
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-fg);
+}
+
+/* Light mode tweaks for the few elements that need explicit overrides */
+:where(.light) .markdown-body code {
+  background: rgba(124, 140, 255, 0.10);
+  color: #5868d8;
+}
+:where(.light) .markdown-body blockquote {
+  background: rgba(124, 140, 255, 0.06);
+}
+:where(.light) .markdown-body a { color: #5868d8; }
+
+/* 注意：不要给本容器加 white-space: pre-wrap。react-markdown 会在块级元素之间
+   产出 \n 文本节点，pre-wrap 会把这些换行渲染成可见空行（嵌套越深空行越多）。 */
+.reasoning-markdown {
+  font-size: 12.5px;
+  color: var(--color-fg-muted);
+  overflow-wrap: anywhere;
+}
+.reasoning-markdown p { margin-block: 0.35rem; }
+/* loose list：<li> 内的 <p> 去掉外边距，避免序号项之间多一截空白 */
+.reasoning-markdown li p { margin-block: 0; }
+.reasoning-markdown h1,
+.reasoning-markdown h2,
+.reasoning-markdown h3,
+.reasoning-markdown h4 {
+  margin-top: 0.65rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.95rem;
+}
+.reasoning-markdown ul,
+.reasoning-markdown ol {
+  margin-block: 0.4rem;
+  padding-left: 1.2rem;
+}
+.reasoning-markdown pre {
+  margin-block: 0.5rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.tool-result-markdown {
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--color-fg-muted);
+  overflow-wrap: anywhere;
+}
+.tool-result-markdown p { margin-block: 0.35rem; }
+.tool-result-markdown li { margin-block: 0.18rem; }
+.tool-result-markdown li p { margin-block: 0; }
+.tool-result-markdown ul,
+.tool-result-markdown ol {
+  margin-block: 0.4rem;
+  padding-left: 1.1rem;
+}
+.tool-result-markdown h1,
+.tool-result-markdown h2,
+.tool-result-markdown h3,
+.tool-result-markdown h4 {
+  margin-top: 0.55rem;
+  margin-bottom: 0.3rem;
+  font-size: 0.78rem;
+}
+.tool-result-markdown pre {
+  margin-block: 0.45rem;
+  padding: 0.55rem 0.65rem;
+}
+
+/* ============================================================
+   Sonner toasts — match dark glass theme
+   ============================================================ */
+[data-sonner-toaster] {
+  --width: 22rem;
+  font-family: inherit;
+}
+
+[data-sonner-toast].app-toast {
+  background: rgba(17, 24, 39, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--color-fg) !important;
+  border-radius: 14px !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 12px 40px -12px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  padding: 14px 16px !important;
+}
+
+[data-sonner-toast] .app-toast-title {
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  color: var(--color-fg) !important;
+}
+
+[data-sonner-toast] .app-toast-description {
+  font-size: 12.5px !important;
+  line-height: 1.5 !important;
+  color: var(--color-fg-muted) !important;
+}
+
+[data-sonner-toast] .app-toast-close {
+  left: auto !important;
+  right: 10px !important;
+  top: 10px !important;
+  transform: none !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  color: var(--color-fg-muted) !important;
+}
+
+[data-sonner-toast] .app-toast-close:hover {
+  background: rgba(255, 255, 255, 0.10) !important;
+  color: var(--color-fg) !important;
+}
+
+[data-sonner-toast].app-toast-success {
+  border-color: rgba(124, 140, 255, 0.35) !important;
+  box-shadow:
+    0 12px 40px -12px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(124, 140, 255, 0.12) !important;
+}
+
+[data-sonner-toast].app-toast-success [data-icon] {
+  color: var(--color-brand) !important;
+}
+
+[data-sonner-toast].app-toast-error {
+  border-color: rgba(255, 107, 107, 0.35) !important;
+}
+
+[data-sonner-toast].app-toast-error [data-icon] {
+  color: var(--color-destructive) !important;
+}
+
+[data-sonner-toast].app-toast-info [data-icon],
+[data-sonner-toast].app-toast-warning [data-icon] {
+  color: var(--color-brand) !important;
+}
+
+:where(.light) [data-sonner-toast].app-toast {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: var(--color-border) !important;
+  box-shadow:
+    0 12px 40px -12px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+:where(.light) [data-sonner-toast] .app-toast-close {
+  background: rgba(15, 23, 42, 0.04) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* User bubble — ::selection does not inherit; target all descendants */
+.user-message-bubble::selection,
+.user-message-bubble *::selection {
+  background: #ffffff !important;
+  color: #2a3a9e !important;
+  -webkit-text-fill-color: #2a3a9e !important;
+}
+
+.user-message-bubble::-moz-selection,
+.user-message-bubble *::-moz-selection {
+  background: #ffffff !important;
+  color: #2a3a9e !important;
+}
+
+/* ============================================================
+   Contract review mode
+   ============================================================ */
+
+/* Risk border colour utilities (left-border on clause cards) */
+.border-l-risk-high   { border-left-color: rgba(239, 68, 68, 0.7); }
+.border-l-risk-medium { border-left-color: rgba(245, 158, 11, 0.7); }
+.border-l-risk-low    { border-left-color: rgba(234, 179, 8, 0.6); }
+.border-l-risk-safe   { border-left-color: rgba(52, 211, 153, 0.4); }
+
+/* Smooth panel slide-in (for framer-motion fallback) */
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.animate-slide-in-left  { animation: slide-in-left  0.4s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.animate-slide-in-right { animation: slide-in-right 0.4s cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+/* Clamp text to N lines (Tailwind v4 line-clamp may not always be available) */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
